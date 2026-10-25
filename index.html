@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
     <title>Afstemmingsparadox – Onder Constructie</title>
-    <meta name="description" content="Visualiseer hoe communicatielijnen exponentieel groeien. Ontdek waarom meer mensen niet altijd sneller is.">
+    <meta name="description" content="Zie hoe het aantal communicatielijnen veel sneller groeit dan het team. Ontdek waarom meer mensen niet altijd sneller is.">
     <meta name="oc:groep" content="projecten">
     <meta name="oc:labels" content="inzicht">
     <meta name="oc:pdca" content="plan">
@@ -862,12 +862,15 @@
         let toastTimer = null;
         function ocToast(msg) { const el = document.getElementById('ocToast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2600); }
         function ocProject(fb) { try { const p = JSON.parse(localStorage.getItem('oc.project')); return p && typeof p.name === 'string' && p.name.trim() ? p.name.trim().slice(0, 80) : fb; } catch { return fb; } }
+        /* Bestandsnaam: tool-project-datum (JJJJ-MM-DD), zonder dubbele datum of dubbele toolnaam */
         function ocFileName(tool, project) {
-            const d = new Date(), iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            const slug = s => String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            let p = slug(project).replace(/(^|-)\d{1,4}-\d{1,2}-\d{1,4}(?=-|$)/g, '').replace(/^-+|-+$/g, '').slice(0, 50).replace(/-$/, '');
-            if (p === slug(tool)) p = '';
-            return [slug(tool), p, iso].filter(Boolean).join('-');
+          const d = new Date(), iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+          const slug = s => String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          const t = slug(tool);
+          let p = slug(project).replace(/(^|-)\d{1,4}-\d{1,2}-\d{1,4}(?=-|$)/g, '').replace(/^-+|-+$/g, '');
+          if (p === t) p = ''; else if (p.startsWith(t + '-')) p = p.slice(t.length + 1);
+          p = p.slice(0, 50).replace(/-+$/, '');
+          return [t, p, iso].filter(Boolean).join('-');
         }
         function wrapText(c, text, x, y, maxW, lh) {
             const words = text.split(' '); let line = '';
