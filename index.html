@@ -284,6 +284,12 @@
         .status-red .status-description { color: var(--red-600); }
         .status-critical .status-description { color: var(--red-700); }
 
+        /* Wat helpt? (neutraal, onder de stand) */
+        .advice { margin-top:0.875rem; padding:1rem 1.125rem; border:1px solid #e2e8f0; border-radius:var(--radius-md); background:#ffffff; text-align:left; }
+        .advice-title { font-size:0.9375rem; font-weight:700; color:#1e293b; margin-bottom:0.25rem; }
+        .advice p { font-size:0.9375rem; line-height:1.5; color:#334155; }
+        .advice .advice-split { margin-top:0.5rem; color:#065f46; font-weight:600; font-variant-numeric:tabular-nums; }
+
         /* Slider section */
         .slider-section {
             margin-bottom: 1.5rem;
@@ -604,7 +610,7 @@ html { -webkit-tap-highlight-color: transparent; }
     <div class="container">
         <div class="main-grid">
             <div class="card net-card">
-                <h2 class="card-title">Netwerkvisualisatie</h2>
+                <h2 class="card-title">Wie met wie afstemt</h2>
                 
                 <div class="canvas-wrapper">
                     <canvas id="networkCanvas" width="320" height="320"></canvas>
@@ -627,6 +633,12 @@ html { -webkit-tap-highlight-color: transparent; }
                     <div class="status-description" id="statusDescription">
                         Korte lijnen, directe afstemming mogelijk. Iedereen weet van iedereen wat er speelt.
                     </div>
+                </div>
+
+                <div class="advice" id="advice" aria-live="polite">
+                    <div class="advice-title">Wat helpt?</div>
+                    <p id="adviceText"></p>
+                    <p class="advice-split" id="adviceSplit" hidden></p>
                 </div>
 
                 <div class="export-row">
@@ -664,11 +676,18 @@ html { -webkit-tap-highlight-color: transparent; }
                     </div>
                     <div class="info-item">
                         <div class="info-title">Het gevolg</div>
-                        <div class="info-text">Meer connecties betekent meer ruis, misverstanden en vergadertijd.</div>
+                        <div class="info-text">Meer lijnen betekent meer misverstanden en meer vergadertijd.</div>
                     </div>
                     <div class="info-item">
                         <div class="info-title">Extra mensen bij achterstand</div>
                         <div class="info-text">Wie extra mensen inzet op een project dat al achterloopt, maakt de achterstand vaak nog groter: de nieuwkomers moeten eerst ingewerkt worden en er komen afstemmingslijnen bij.</div>
+                    </div>
+                </div>
+
+                <div class="info-section" style="margin-top:0.75rem">
+                    <div class="info-item">
+                        <div class="info-title">Een vuistregel</div>
+                        <div class="info-text">De grenzen hieronder zijn een richtpunt, geen wet. Een team dat goed op elkaar ingespeeld is, kan groter zijn. Een team met veel nieuwe mensen voelt de last vroeger.</div>
                     </div>
                 </div>
 
@@ -678,22 +697,22 @@ html { -webkit-tap-highlight-color: transparent; }
                         <div class="stadium-item stadium-green" id="stadium-1">
                             <span class="stadium-range">≤5 personen</span>
                             <span class="stadium-name">Efficiënt</span>
-                            <span class="stadium-desc">Optimaal. Weinig overhead.</span>
+                            <span class="stadium-desc">Korte lijnen, weinig overleg.</span>
                         </div>
                         <div class="stadium-item stadium-orange" id="stadium-2">
                             <span class="stadium-range">6-10 personen</span>
                             <span class="stadium-name">Kantelpunt</span>
-                            <span class="stadium-desc">Structuur wordt nodig.</span>
+                            <span class="stadium-desc">Rollen en afspraken nodig.</span>
                         </div>
                         <div class="stadium-item stadium-red" id="stadium-3">
                             <span class="stadium-range">11-16 personen</span>
                             <span class="stadium-name">Stroperig</span>
-                            <span class="stadium-desc">Meer sync dan productie.</span>
+                            <span class="stadium-desc">Meer afstemmen dan werken.</span>
                         </div>
                         <div class="stadium-item stadium-critical" id="stadium-4">
                             <span class="stadium-range">17+ personen</span>
                             <span class="stadium-name">Paradox</span>
-                            <span class="stadium-desc">Consensus onhaalbaar.</span>
+                            <span class="stadium-desc">Samen beslissen lukt niet meer.</span>
                         </div>
                     </div>
                 </div>
@@ -740,7 +759,7 @@ html { -webkit-tap-highlight-color: transparent; }
             } else if (n <= 10) {
                 statusClass = 'status-orange';
                 statusTitle = 'Kantelpunt';
-                statusDescription = 'De overleg-last begint te tellen. Formele structuren en rolverdeling worden nodig.';
+                statusDescription = 'Het overleg begint te wegen. Je hebt duidelijke rollen en afspraken nodig.';
                 lineColor = 'rgba(245, 158, 11, 0.4)';
                 nodeColor = '#b45309';
                 sliderColor = '#f59e0b';
@@ -748,7 +767,7 @@ html { -webkit-tap-highlight-color: transparent; }
             } else if (n <= 16) {
                 statusClass = 'status-red';
                 statusTitle = 'Stroperig';
-                statusDescription = 'Hoog risico op verlamming. Meer tijd aan synchroniseren dan aan produceren.';
+                statusDescription = 'Het werk dreigt vast te lopen. Je bent meer tijd kwijt aan afstemmen dan aan het werk zelf.';
                 lineColor = 'rgba(239, 68, 68, 0.35)';
                 nodeColor = '#dc2626';
                 sliderColor = '#ef4444';
@@ -756,7 +775,7 @@ html { -webkit-tap-highlight-color: transparent; }
             } else {
                 statusClass = 'status-critical';
                 statusTitle = 'Afstemmingsparadox';
-                statusDescription = 'De groep is te groot voor consensus. Subgroepvorming en politiek zijn onvermijdelijk.';
+                statusDescription = 'De groep is te groot om samen te beslissen. Er ontstaan vanzelf kleine groepjes en zijkanalen.';
                 lineColor = 'rgba(185, 28, 28, 0.5)';
                 nodeColor = '#991b1b';
                 sliderColor = '#b91c1c';
@@ -805,12 +824,33 @@ html { -webkit-tap-highlight-color: transparent; }
                 el.classList.toggle('active', i === activeStadium);
             }
 
-            current = { n, channels, statusTitle, statusDescription, lineColor, nodeColor, activeStadium };
+            const advice = ADVICE[activeStadium - 1], split = splitTeams(n);
+            document.getElementById('adviceText').textContent = advice;
+            const sp = document.getElementById('adviceSplit');
+            sp.hidden = !split; sp.textContent = split ? split.text : '';
+            current = { n, channels, statusTitle, statusDescription, lineColor, nodeColor, activeStadium, advice, split };
             document.getElementById('stepDown').disabled = n <= +slider.min;
             document.getElementById('stepUp').disabled = n >= +slider.max;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawNetwork(ctx, centerX, centerY, radius, n, lineColor, nodeColor, 1);
+        }
+
+        // Wat je kan doen, per stand
+        const ADVICE = [
+            'Hou het zo. Spreek wel af wie de knoop doorhakt als jullie het niet eens raken.',
+            'Leg vast wie wat doet en wie beslist. Eén kort, vast overleg werkt beter dan iedereen in elke mail.',
+            'Werk in deelteams met elk een eigen opdracht. Per deelteam houdt één persoon contact met de andere.',
+            'Splits op in deelteams, met een kleine kerngroep die beslist. De anderen hou je op de hoogte; ze hoeven niet mee te beslissen.'
+        ];
+        // Hoeveel lijnen blijven er over in deelteams van hoogstens 5, met per team één persoon die contact houdt?
+        function splitTeams(n) {
+            if (n <= 5) return null;
+            const k = Math.ceil(n / 5), base = Math.floor(n / k), extra = n % k;
+            const sizes = Array.from({ length: k }, (_, i) => base + (i < extra ? 1 : 0));
+            const lines = sizes.reduce((s, x) => s + x * (x - 1) / 2, 0) + k * (k - 1) / 2;
+            const list = sizes.length > 1 ? sizes.slice(0, -1).join(', ') + ' en ' + sizes[sizes.length - 1] : String(sizes[0]);
+            return { k, sizes, lines, text: `In ${k} deelteams (${list} personen), met per team één persoon die contact houdt: ${lines} lijnen in plaats van ${n * (n - 1) / 2}.` };
         }
 
         function drawNetwork(ctx, centerX, centerY, radius, n, lineColor, nodeColor, k) {
@@ -898,7 +938,7 @@ html { -webkit-tap-highlight-color: transparent; }
             const { n, channels, statusTitle, statusDescription, lineColor, nodeColor, activeStadium } = current;
             // kop
             c.fillStyle = '#1e293b'; c.font = `700 26px ${F}`; c.textBaseline = 'alphabetic'; c.fillText('De Afstemmingsparadox', 48, 62);
-            c.fillStyle = '#64748b'; c.font = `400 16px ${F}`; c.fillText('Waarom meer mensen vaak trager gaat', 48, 88);
+            c.fillStyle = '#64748b'; c.font = `400 16px ${F}`; const proj = ocProject(''); c.fillText(proj ? proj + ' · Waarom meer mensen vaak trager gaat' : 'Waarom meer mensen vaak trager gaat', 48, 88);
             const date = new Date().toLocaleDateString('nl-BE', { day: 'numeric', month: 'long', year: 'numeric' });
             c.fillStyle = '#94a3b8'; c.font = `400 14px ${F}`; c.textAlign = 'right'; c.fillText(date, W - 48, 88); c.textAlign = 'left';
             c.fillStyle = '#10b981'; c.fillRect(48, 104, W - 96, 2);
@@ -917,8 +957,10 @@ html { -webkit-tap-highlight-color: transparent; }
             c.fillStyle = ink; c.font = `700 34px ${F}`; c.fillText(statusTitle, X, 272);
             c.fillStyle = '#334155'; c.font = `400 20px ${F}`;
             let y = wrapText(c, statusDescription, X, 312, maxW, 30);
-            c.fillStyle = '#64748b'; c.font = `400 16px ${F}`;
-            wrapText(c, 'Communicatielijnen = n × (n − 1) ÷ 2. Elke nieuwe persoon moet met iedereen afstemmen.', X, y + 10, maxW, 24);
+            c.fillStyle = '#334155'; c.font = `600 16px ${F}`; c.fillText('Wat helpt?', X, y + 8);
+            c.font = `400 16px ${F}`; y = wrapText(c, current.advice, X, y + 32, maxW, 23);
+            if (current.split) { c.fillStyle = '#065f46'; c.font = `600 16px ${F}`; wrapText(c, current.split.text, X, y + 6, maxW, 23); }
+            else { c.fillStyle = '#64748b'; c.font = `400 15px ${F}`; wrapText(c, 'Communicatielijnen = n × (n − 1) ÷ 2. Elke nieuwe persoon moet met iedereen afstemmen.', X, y + 6, maxW, 22); }
             // balk 2–24 met de vier stadia
             const bx = 48, bw = W - 96, by = 520, bh = 18, min = 2, max = 24;
             const px = v => bx + (v - min) / (max - min) * bw;
