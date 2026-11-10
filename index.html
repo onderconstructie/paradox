@@ -1579,7 +1579,7 @@ header[data-oc-kop][data-stand="compact"]::before { content:""; order:-1; flex:n
             STAGES.forEach((s, i) => {
                 const x0 = i === 0 ? bx : px(s.from - 0.5), x1 = i === STAGES.length - 1 ? bx + bw : px(s.to + 0.5);
                 c.fillStyle = s.fill; c.fillRect(x0, by, x1 - x0, bh);
-                c.fillStyle = s.ink; c.font = `600 14px ${F}`; c.fillText(`${s.name} (${s.from}${s.to === 24 ? '+' : '–' + s.to})`, x0 + 8, by + bh + 22);
+                c.fillStyle = s.ink; c.font = `600 14px ${F}`; c.fillText(`${s.name} (${s.from}${s.to === 24 ? '+' : '-' + s.to})`, x0 + 8, by + bh + 22);
             });
             c.fillStyle = '#94a3b8'; c.font = `400 13px ${F}`; c.fillText('2', bx, by - 10); c.textAlign = 'right'; c.fillText('24', bx + bw, by - 10); c.textAlign = 'left';
             const mx = px(n);
