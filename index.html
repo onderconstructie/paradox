@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; frame-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<!-- oc-delen -->
+<link rel="canonical" href="https://onderconstructie.app/paradox/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Onder Constructie">
+<meta property="og:locale" content="nl_BE">
+<meta property="og:title" content="Afstemmingsparadox · Onder Constructie">
+<meta property="og:description" content="Zie hoe het aantal communicatielijnen veel sneller groeit dan het team. Ontdek waarom meer mensen niet altijd sneller is.">
+<meta property="og:url" content="https://onderconstructie.app/paradox/">
+<meta property="og:image" content="https://onderconstructie.app/og/paradox.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Afstemmingsparadox. Waarom meer mensen vaak trager gaat">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /oc-delen -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
     <title>Afstemmingsparadox – Onder Constructie</title>
@@ -171,7 +185,7 @@
         }
 
         .card-title {
-            font-size: 0.75rem;
+            font-size:0.8125rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -219,7 +233,7 @@
         }
 
         .stat-label {
-            font-size: 0.75rem;
+            font-size:0.8125rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -254,7 +268,7 @@
         }
 
         .status-label {
-            font-size: 0.75rem;
+            font-size:0.8125rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -357,7 +371,7 @@
             display: flex;
             justify-content: space-between;
             margin-top: 0.5rem;
-            font-size: 0.75rem;
+            font-size:0.8125rem;
             color: var(--slate-400);
         }
 
@@ -399,7 +413,7 @@
         }
 
         .stadia-title {
-            font-size: 0.75rem;
+            font-size:0.8125rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -417,7 +431,7 @@
         .stadium-item {
             padding: 0.75rem;
             border-radius: var(--radius-sm);
-            font-size: 0.75rem;
+            font-size:0.8125rem;
             line-height: 1.4;
             transition: all 0.2s;
         }
@@ -646,7 +660,7 @@ details.explain.oc-u[open] .oc-u-pijl { transform:rotate(180deg); background:var
 
 /* op brede schermen: de stappen als kleine route, die plaats maakt voor de echte stappen bij openen */
 details.explain.oc-u .oc-u-route { display:none; align-items:center; flex-shrink:0; margin-right:0.75rem; transition:opacity 0.25s, visibility 0.25s; }
-details.explain.oc-u .oc-u-route i { position:relative; display:flex; align-items:center; justify-content:center; width:26px; height:26px; margin-left:16px; border-radius:50%; border:1.5px solid var(--u-licht); background:#ffffff; color:var(--u-donker); font-style:normal; font-size:0.75rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; transition:border-color 0.2s, background-color 0.2s; }
+details.explain.oc-u .oc-u-route i { position:relative; display:flex; align-items:center; justify-content:center; width:26px; height:26px; margin-left:16px; border-radius:50%; border:1.5px solid var(--u-licht); background:#ffffff; color:var(--u-donker); font-style:normal; font-size:0.8125rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; transition:border-color 0.2s, background-color 0.2s; }
 details.explain.oc-u .oc-u-route i:first-child { margin-left:0; }
 details.explain.oc-u .oc-u-route i + i::before { content:''; position:absolute; right:calc(100% + 1.5px); top:calc(50% - 0.75px); width:16px; height:1.5px; background:var(--u-licht); }
 details.explain.oc-u > summary:hover .oc-u-route i { border-color:var(--u-groen); }
@@ -1680,7 +1694,7 @@ header[data-oc-kop] .oc-kop-acties .oc-hulp svg { width:22px; height:22px; }
             document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
         }
         let pdfLib = null;
-        const loadPdf = () => pdfLib || (pdfLib = new Promise((ok, fail) => { const s = document.createElement('script'); s.src = '/lib/jspdf-2.5.1.umd.min.js'; s.onload = ok; s.onerror = () => { pdfLib = null; fail(new Error('laden mislukt')); }; document.head.appendChild(s); }));
+        const loadPdf = () => pdfLib || (pdfLib = new Promise((ok, fail) => { const s = document.createElement('script'); s.src = '/lib/jspdf-4.2.1.umd.min.js'; s.onload = ok; s.onerror = () => { pdfLib = null; fail(new Error('laden mislukt')); }; document.head.appendChild(s); }));
         async function doExport(kind) {
             const name = ocFileName('paradox', ocProject(''));
             ocToast('Bezig…');
